@@ -5,4 +5,10 @@
     <RootNamespace>virus_tortoise.web</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\img\logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
