@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorFileUploader" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\virus-tortoise.lib\virus-tortoise.lib.csproj" />
   </ItemGroup>
 
