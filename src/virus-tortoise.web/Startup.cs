@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using virus_tortoise.web.Data;
+using virus_tortoise.lib;
 
 namespace virus_tortoise.web
 {
@@ -23,7 +22,7 @@ namespace virus_tortoise.web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<PredictionService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
