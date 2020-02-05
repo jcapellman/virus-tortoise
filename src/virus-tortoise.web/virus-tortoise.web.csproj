@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\virus-tortoise.lib\virus-tortoise.lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\img\logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
