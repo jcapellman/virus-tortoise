@@ -1,4 +1,5 @@
 using System;
+using virus_tortoise.lib.Extensions;
 
 namespace virus_tortoise.lib
 {
@@ -9,7 +10,7 @@ namespace virus_tortoise.lib
             return new PredictionResponseItem
             {
                 FileSize = fileData.Length,
-                SHA1 = String.Empty,
+                SHA256 = fileData.ToSHA256(),
                 FileType = "Unknown",
                 ErrorMessage = string.Empty
             };
