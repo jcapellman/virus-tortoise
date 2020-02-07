@@ -11,6 +11,8 @@ namespace virus_tortoise.lib
             {
                 FileSize = fileData.Length,
                 SHA256 = fileData.ToSHA256(),
+                SHA1 = fileData.ToSHA1(),
+                MD5 = fileData.ToMD5(),
                 FileType = "Unknown",
                 ErrorMessage = string.Empty
             };
