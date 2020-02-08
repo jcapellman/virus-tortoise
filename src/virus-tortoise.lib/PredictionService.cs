@@ -15,7 +15,8 @@ namespace virus_tortoise.lib
         {
             if (_parsers == null)
             {
-                _parsers = typeof(BaseParser).Assembly.GetTypes().Where(a => a.BaseType == typeof(BaseParser) && !a.IsAbstract).Select(b => (BaseParser)Activator.CreateInstance(b)).ToList();
+                _parsers = typeof(BaseParser).Assembly.GetTypes().Where(a => a.BaseType == typeof(BaseParser) && !a.IsAbstract).Select(b => 
+                    (BaseParser)Activator.CreateInstance(b)).ToList();
             }
         }
 
@@ -37,6 +38,8 @@ namespace virus_tortoise.lib
             {
                 response.FileType = parser.FileType;
             }
+
+            response.IsValid = parser.IsValid(fileData);
 
             return response;
         }

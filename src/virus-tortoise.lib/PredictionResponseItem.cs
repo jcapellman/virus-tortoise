@@ -13,5 +13,7 @@ namespace virus_tortoise.lib
         public string FileType { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public bool IsValid { get; set; }
     }
 }

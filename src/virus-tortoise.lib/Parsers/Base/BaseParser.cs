@@ -5,5 +5,7 @@
         public abstract string FileType { get; }
 
         public abstract bool IsFile(byte[] data);
+
+        public abstract bool IsValid(byte[] data);
     }
 }
