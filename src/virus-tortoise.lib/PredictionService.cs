@@ -29,7 +29,8 @@ namespace virus_tortoise.lib
                 SHA1 = fileData.ToSHA1(),
                 MD5 = fileData.ToMD5(),
                 FileType = "Unsupported File Type",
-                ErrorMessage = string.Empty
+                ErrorMessage = string.Empty,
+                IsValid = false
             };
 
             var parser = _parsers.FirstOrDefault(a => a.IsFile(fileData));
@@ -37,9 +38,8 @@ namespace virus_tortoise.lib
             if (parser != null)
             {
                 response.FileType = parser.FileType;
+                response.IsValid = parser.IsValid(fileData);
             }
-
-            response.IsValid = parser.IsValid(fileData);
 
             return response;
         }
