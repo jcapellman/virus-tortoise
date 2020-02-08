@@ -8,7 +8,9 @@
     <header class="container h-100">
         <div class="d-flex align-items-center justify-content-center h-100">
             <div class="d-flex flex-column">
-                <img src="/img/logo.png" class="img-fluid" alt="virus tortoise" />
+                <div class="text-center">
+                    <img src="/img/logo.png" class="img-fluid" style="max-width: 485px;" alt="virus tortoise" />
+                </div>
 
                 @if (_classificationResponseItem != null)
                 {
@@ -18,7 +20,7 @@
                     }
                     else
                     {
-                        <h3 style="margin-top: 20px">File Prediction Results:</h3>
+                        <h3 style="margin-top: 20px">File Prediction Results</h3>
 
                         <table class="table" style="margin: 0 auto;">
                             <tr>
