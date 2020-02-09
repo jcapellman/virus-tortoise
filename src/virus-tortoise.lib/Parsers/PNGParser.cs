@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using virus_tortoise.lib.Parsers.Base;
 
@@ -6,6 +7,28 @@ namespace virus_tortoise.lib.Parsers
 {
     public class PNGParser : BaseParser
     {
+        public class IHDR
+        {
+            public Int32 Width;
+
+            public Int32 Height;
+
+            public byte BitDepth;
+
+            public byte ColorType;
+
+            public byte Compression;
+            public byte FilterMethod;
+
+            public byte Interlace;
+
+            public IHDR(byte[] data)
+            {
+                Width = BitConverter.ToInt32(data, 8);
+                Height = BitConverter.ToInt32(data, 12);
+            }
+        }
+
         private byte[] FileMagicBytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
 
         public override string FileType => "PNG";
@@ -14,18 +37,11 @@ namespace virus_tortoise.lib.Parsers
 
         public override bool IsValid(byte[] data)
         {
-            var span = data.AsSpan();
+            // Skip first 8 bytes
+            // Read 4 chunks to get size
 
-            var header = span.Slice(0, 8);
-
-            var clen = BitConverter.ToInt32(span.Slice(8, 4));
-
-            if (clen != 13)
-            {
-                return false;
-            }
-
-            var chuckId = span.Slice(12, 4);
+            // Loop through next 4 bytes
+            var header = new IHDR(data);
 
             return true;
         }
