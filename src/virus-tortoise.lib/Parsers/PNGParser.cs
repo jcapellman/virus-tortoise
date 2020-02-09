@@ -13,6 +13,10 @@ namespace virus_tortoise.lib.Parsers
         private const int ChunkIdSize = 4;
         private const int ChunkInfoSize = 4;
 
+        private const int MaxByteDepth = 3;
+
+        public class IEND { }
+
         public class IHDR
         {
             public Int32 Width;
@@ -36,6 +40,11 @@ namespace virus_tortoise.lib.Parsers
             }
         }
 
+        public class IDAT
+        {
+            // Properties
+        }
+
         private byte[] FileMagicBytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
 
         public override string FileType => "PNG";
@@ -56,7 +65,7 @@ namespace virus_tortoise.lib.Parsers
                 // Skip the first 7 bytes from the header
                 ms.Seek(FileMagicBytes.Length, SeekOrigin.Begin);
 
-                while (ms.CanRead)
+                while (ms.Position != data.Length)
                 {
                     byte[] chunkInfo = new byte[ChunkInfoSize];
 
@@ -80,12 +89,18 @@ namespace virus_tortoise.lib.Parsers
                             var header = new IHDR(chunk);
 
                             // Payload exceeds length
-                            if (data.Length <= (header.Width * header.Height * 16) + ms.Position)
+                            if (data.Length <= (header.Width * header.Height * MaxByteDepth) + ms.Position)
                             {
-                                return true;
+                                break;
                             }
 
                             return false;
+                        case nameof(IDAT):
+                            // Build Embedded file from the chunks
+                            break;
+                        case nameof(IEND):
+                            // Note that the PNG had an end
+                            break;
                     }
                 }
 
