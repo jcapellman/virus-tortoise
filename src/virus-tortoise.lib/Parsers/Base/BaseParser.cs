@@ -4,8 +4,6 @@
     {
         public abstract string FileType { get; }
 
-        public abstract bool IsFile(byte[] data);
-
-        public abstract bool IsValid(byte[] data);
+        public abstract (string FileType, bool IsValid, string[] AnalysisNotes) Analyze(byte[] data);
     }
 }
