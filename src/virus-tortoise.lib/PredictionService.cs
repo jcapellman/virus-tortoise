@@ -30,15 +30,22 @@ namespace virus_tortoise.lib
                 MD5 = fileData.ToMD5(),
                 FileType = "Unsupported File Type",
                 ErrorMessage = string.Empty,
-                IsValid = false
+                IsValid = false,
+                AnalysisNotes = Array.Empty<string>()
             };
 
-            var parser = _parsers.FirstOrDefault(a => a.IsFile(fileData));
-
-            if (parser != null)
+            foreach (var parser in _parsers)
             {
-                response.FileType = parser.FileType;
-                response.IsValid = parser.IsValid(fileData);
+                var (FileType, IsValid, AnalysisNotes) = parser.Analyze(fileData);
+
+                if (!string.IsNullOrEmpty(FileType))
+                {
+                    response.FileType = FileType;
+                    response.IsValid = IsValid;
+                    response.AnalysisNotes = AnalysisNotes;
+
+                    break;
+                }
             }
 
             return response;
