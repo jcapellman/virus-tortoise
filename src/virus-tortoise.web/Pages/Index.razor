@@ -47,6 +47,22 @@
                                 <td class="tableLabel">Is Valid</td>
                                 <td>@_classificationResponseItem.IsValid</td>
                             </tr>
+                            <tr>
+                                <td class="tableLabel">Analysis Notes</td>
+                                <td>
+                                    @if (_classificationResponseItem.AnalysisNotes == null)
+                                    {
+                                        <p>(No notes)</p>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var line in _classificationResponseItem.AnalysisNotes)
+                                        {
+                                            <p>@line</p>
+                                        }
+                                    }
+                                </td>
+                            </tr>
                         </table>
 
                         <button @onclick="ResetForm" class="btn btn-primary">Submit another file</button>
