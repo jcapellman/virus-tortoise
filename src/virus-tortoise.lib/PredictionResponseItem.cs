@@ -14,6 +14,8 @@ namespace virus_tortoise.lib
 
         public string ErrorMessage { get; set; }
 
+        public string[] AnalysisNotes { get; set; }
+
         public bool IsValid { get; set; }
     }
 }
