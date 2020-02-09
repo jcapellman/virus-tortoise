@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using virus_tortoise.lib.Extensions;
 using virus_tortoise.lib.Parsers.Base;
 
@@ -9,6 +10,9 @@ namespace virus_tortoise.lib.Parsers
 {
     public class PNGParser : BaseParser
     {
+        private const int ChunkIdSize = 4;
+        private const int ChunkInfoSize = 4;
+
         public class IHDR
         {
             public Int32 Width;
@@ -26,9 +30,9 @@ namespace virus_tortoise.lib.Parsers
 
             public IHDR(byte[] data)
             {
-                Width = data.Take(4).ToArray().ToInt32();
+                Width = data.ToInt32();
 
-                Height = data.Skip(4).Take(4).ToArray().ToInt32();
+                Height = data.ToInt32(4);
             }
         }
 
@@ -54,15 +58,15 @@ namespace virus_tortoise.lib.Parsers
 
                 while (ms.CanRead)
                 {
-                    byte[] chunkInfo = new byte[4];
+                    byte[] chunkInfo = new byte[ChunkInfoSize];
 
                     ms.Read(chunkInfo, 0, chunkInfo.Length);
 
                     var chunkSize = chunkInfo.ToInt32();
 
-                    byte[] chunkIdBytes = new byte[4];
+                    byte[] chunkIdBytes = new byte[ChunkIdSize];
 
-                    ms.Read(chunkIdBytes, 0, 4);
+                    ms.Read(chunkIdBytes, 0, ChunkIdSize);
 
                     var chunkId = Encoding.UTF8.GetString(chunkIdBytes);
 
@@ -72,13 +76,13 @@ namespace virus_tortoise.lib.Parsers
 
                     switch (chunkId)
                     {
-                        case "IHDR":
+                        case nameof(IHDR):
                             var header = new IHDR(chunk);
 
                             // Payload exceeds length
-                            if (data.Length <= (header.Width * header.Height * 24) + ms.Position)
+                            if (data.Length <= (header.Width * header.Height * 16) + ms.Position)
                             {
-                                break;
+                                return true;
                             }
 
                             return false;
