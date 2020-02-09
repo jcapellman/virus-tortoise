@@ -28,6 +28,7 @@ namespace virus_tortoise.lib.Parsers
             public byte ColorType;
 
             public byte Compression;
+
             public byte FilterMethod;
 
             public byte Interlace;
@@ -49,9 +50,7 @@ namespace virus_tortoise.lib.Parsers
 
         public override string FileType => "PNG";
 
-        public override bool IsFile(byte[] data) => data.AsSpan().Slice(0, FileMagicBytes.Length).SequenceEqual(FileMagicBytes);
-
-        public override bool IsValid(byte[] data)
+        public override (string FileType, bool IsValid, string[] AnalysisNotes) Analyze(byte[] data)
         {
             try
             {
@@ -61,6 +60,15 @@ namespace virus_tortoise.lib.Parsers
                 }
 
                 using var ms = new MemoryStream(data);
+
+                byte[] fileMagic = new byte[FileMagicBytes.Length];
+
+                ms.Read(fileMagic, 0, fileMagic.Length);
+
+                if (!fileMagic.SequenceEqual(FileMagicBytes))
+                {
+                    return (string.Empty, false, null);
+                }
 
                 // Skip the first 7 bytes from the header
                 ms.Seek(FileMagicBytes.Length, SeekOrigin.Begin);
@@ -94,7 +102,7 @@ namespace virus_tortoise.lib.Parsers
                                 break;
                             }
 
-                            return false;
+                            return (FileType, false, new[] { "SUSPICIOUS: Payload is larger than what the size should be" });
                         case nameof(IDAT):
                             // Build Embedded file from the chunks
                             break;
@@ -104,12 +112,13 @@ namespace virus_tortoise.lib.Parsers
                     }
                 }
 
-                return true;
-            } catch (Exception ex)
+                return (FileType, true, null);
+            }
+            catch (Exception ex)
             {
                 // TODO: LOG HERE
 
-                return false;
+                return (string.Empty, false, new [] { ex.ToString() });
             }
         }
     }
