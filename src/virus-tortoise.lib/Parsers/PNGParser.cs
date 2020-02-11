@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using NLog;
+
 using virus_tortoise.lib.Extensions;
 using virus_tortoise.lib.Parsers.Base;
 
@@ -10,6 +12,8 @@ namespace virus_tortoise.lib.Parsers
 {
     public class PNGParser : BaseParser
     {
+        private static readonly Logger Log = NLog.LogManager.GetCurrentClassLogger();
+
         private const int ChunkIdSize = 4;
         private const int ChunkInfoSize = 4;
 
@@ -61,7 +65,7 @@ namespace virus_tortoise.lib.Parsers
 
                 using var ms = new MemoryStream(data);
 
-                byte[] fileMagic = new byte[FileMagicBytes.Length];
+                var fileMagic = new byte[FileMagicBytes.Length];
 
                 ms.Read(fileMagic, 0, fileMagic.Length);
 
@@ -75,19 +79,19 @@ namespace virus_tortoise.lib.Parsers
 
                 while (ms.Position != data.Length)
                 {
-                    byte[] chunkInfo = new byte[ChunkInfoSize];
+                    var chunkInfo = new byte[ChunkInfoSize];
 
                     ms.Read(chunkInfo, 0, chunkInfo.Length);
 
                     var chunkSize = chunkInfo.ToInt32();
 
-                    byte[] chunkIdBytes = new byte[ChunkIdSize];
+                    var chunkIdBytes = new byte[ChunkIdSize];
 
                     ms.Read(chunkIdBytes, 0, ChunkIdSize);
 
                     var chunkId = Encoding.UTF8.GetString(chunkIdBytes);
 
-                    byte[] chunk = new byte[chunkSize];
+                    var chunk = new byte[chunkSize];
 
                     ms.Read(chunk, 0, chunkSize);
 
@@ -116,7 +120,7 @@ namespace virus_tortoise.lib.Parsers
             }
             catch (Exception ex)
             {
-                // TODO: LOG HERE
+                Log.Error($"PNGParser::Analyze: Failed to process {ex}");
 
                 return (string.Empty, false, new [] { ex.ToString() });
             }

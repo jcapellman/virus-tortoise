@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="BlazorFileUploader" Version="1.0.0" />
+    <PackageReference Include="NLog" Version="4.6.8" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using NLog;
+
 using virus_tortoise.lib.Extensions;
 using virus_tortoise.lib.Parsers.Base;
 
@@ -9,6 +11,8 @@ namespace virus_tortoise.lib
 {
     public class PredictionService
     {
+        private static readonly Logger Log = NLog.LogManager.GetCurrentClassLogger();
+
         private static List<BaseParser> _parsers;
 
         public PredictionService()
@@ -36,16 +40,18 @@ namespace virus_tortoise.lib
 
             foreach (var parser in _parsers)
             {
-                var (FileType, IsValid, AnalysisNotes) = parser.Analyze(fileData);
+                var (fileType, isValid, analysisNotes) = parser.Analyze(fileData);
 
-                if (!string.IsNullOrEmpty(FileType))
+                if (string.IsNullOrEmpty(fileType))
                 {
-                    response.FileType = FileType;
-                    response.IsValid = IsValid;
-                    response.AnalysisNotes = AnalysisNotes;
-
-                    break;
+                    continue;
                 }
+
+                response.FileType = fileType;
+                response.IsValid = isValid;
+                response.AnalysisNotes = analysisNotes;
+
+                break;
             }
 
             return response;
